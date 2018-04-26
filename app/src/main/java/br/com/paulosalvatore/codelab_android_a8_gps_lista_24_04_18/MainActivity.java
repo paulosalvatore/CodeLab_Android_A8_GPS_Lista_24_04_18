@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             List<String> providers = locationManager.getProviders(true);
             Location bestLocation = null;
+            String bestProvider = null;
 
             for (String provider : providers) {
                 Location location = locationManager.getLastKnownLocation(provider);
@@ -71,7 +72,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
                     bestLocation = location;
+                    bestProvider = provider;
                 }
+            }
+
+            if (bestProvider != null) {
+                locationManager.requestLocationUpdates(
+                        bestProvider,
+                        1L,
+                        2F,
+                        this
+                );
             }
 
             inicializarMapa();
